@@ -16,28 +16,54 @@ Example &Example::inst()
 
 bool Example::start()
 {
-	// Initialise the physics system. Set the default gravity to 9.8m/s^2 down.
 	kage::Physics::init(b2Vec2(0, 9.8));
-	// Floor, left wall and right wall static colliders.
-	kage::Physics::BoxBuilder().pos(kf::Vector2(15, 16)).size(30, 1).build(kage::Physics::getDefaultStatic());
-	kage::Physics::BoxBuilder().pos(kf::Vector2(0, 8)).size(1, 16).build(kage::Physics::getDefaultStatic());
-	kage::Physics::BoxBuilder().pos(kf::Vector2(30, 8)).size(1, 16).build(kage::Physics::getDefaultStatic());
-
 	m_backgroundSprite = kage::TextureManager::getSprite("data/sky.jpg");
+	Ball = kage::TextureManager::getSprite("data/Ball.png");
+	Ball->setPosition(m_window.getSize().x / 2, m_window.getSize().y / 2);
+
+	Paddle = kage::TextureManager::getSprite("data/Paddle.png");
+	Paddle->setPosition(0, Paddle_Y);
+	PaddleCenter = Paddle->getGlobalBounds().width / 2;
+
 	sf::Vector2u resolution = m_backgroundSprite->getTexture()->getSize();
 	m_backgroundSprite->setScale(float(m_window.getSize().x) / resolution.x, float(m_window.getSize().y) / resolution.y);
-
-	Rabbit *rabbit = kage::World::build<Rabbit>();
-	rabbit->position(2, 4); // Note that this now uses metres instead of pixels.
 
 	return true;
 }
 
 void Example::update(float deltaT)
 {
-	// You need to update the physics system every game update
 
-	kage::Physics::update(deltaT);
+	sf::Vector2f MousePointer = (sf::Vector2f)sf::Mouse::getPosition(m_window);
+	Paddle->setPosition(MousePointer.x - PaddleCenter, Paddle_Y);
+
+	BallPos = Ball->getPosition();
+	Ball->setPosition(BallPos.x + SpeedX,BallPos.y + SpeedY);
+	
+	if (Ball->getPosition().y + Ball_Height >= m_window.getSize().y )
+	{
+		Ball->setPosition(Paddle->getPosition().x + PaddleCenter, Paddle_Y - 30);
+	}
+
+	if (Ball->getPosition().y <= 0)
+	{
+		SpeedY = -SpeedY;
+	}
+
+	if (Ball->getPosition().x + Ball_Width >= m_window.getSize().x)
+	{
+		SpeedX = -SpeedX;
+	}
+	else if (Ball->getPosition().x <= 0)
+	{
+		SpeedX = -SpeedX;
+	}
+
+	if (Ball->getPosition().y + Ball_Height >= Paddle_Y && 
+	Ball->getPosition().x >= Paddle->getPosition().x && Ball->getPosition().x <= Paddle->getPosition().x + Paddle->getGlobalBounds().width)
+	{
+		SpeedY = -SpeedY;
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && m_window.hasFocus())
 	{
@@ -55,8 +81,8 @@ void Example::update(float deltaT)
 void Example::render()
 {
 	m_window.draw(*m_backgroundSprite);
-	// The next line draws the physics debug info. This should be removed in a final release.
-	kage::Physics::debugDraw(&m_window, 64);
+	m_window.draw(*Ball);
+	m_window.draw(*Paddle);
 }
 
 void Example::cleanup()

@@ -1,4 +1,5 @@
 #pragma once
+#include "tile.h"
 
 #include "app.h"
 
@@ -11,9 +12,9 @@
 #define Y_Length 100
 
 #define LineThickness 5
-#define LineArraySize 11
-#define RealCellSize LineArraySize - 1
-#define FullCellSize (RealCellSize) * (RealCellSize)
+#define FullCellSize (X_Cell) * (Y_Cell)
+
+
 
 class Example : public App
 {
@@ -30,27 +31,33 @@ public:
 	sf::Sprite *m_catSprite;
 	sf::Texture *m_catTexture;
 
-	sf::Texture* m_dirtBlockTexture;
 	sf::Sprite *m_dirtBlockSprite;
 	bool b_dirtGrab;
+	Tiles dirt;
 
-	sf::Texture* m_waterBlockTexture;
 	sf::Sprite *m_waterBlockSprite;
 	bool b_waterGrab;
+	Tiles water;
 
-	sf::Texture* m_grassBlockTexture;
 	sf::Sprite* m_grassBlockSprite;
 	bool b_grassGrab;
+	Tiles grass;
 
-	sf::Texture* m_stoneBlockTexture;
 	sf::Sprite* m_stoneBlockSprite;
 	bool b_stoneGrab;
+	Tiles stone;
 
-	sf::Texture *m_plainTexture;
 	sf::Sprite* m_plainSprite;
+	Tiles plain;
 
-	sf::RectangleShape LineH[LineArraySize];
-	sf::RectangleShape LineV[LineArraySize];
+	sf::Texture* m_currentTexture;
+
+	int MapIntoFile[FullCellSize];
+
+	sf::RectangleShape LineH[Y_Cell + 1];
+	sf::RectangleShape LineV[X_Cell + 1];
 
 	sf::Sprite Tiles [FullCellSize];
+
+
 };
