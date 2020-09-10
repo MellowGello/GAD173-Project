@@ -16,7 +16,7 @@ public:
 
 
 	sf::Font fontText;
-	sf::Text MenuText[3];
+	sf::Text MenuText[4];
 
 	sf::Vector2f CenterWindow;
 	int MenuOffset;

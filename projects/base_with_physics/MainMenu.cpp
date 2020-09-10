@@ -29,11 +29,12 @@ bool MainMenu::start()
 
 	//Naming the Menu
 	MenuText[0].setString("Play");
-	MenuText[1].setString("Options");
-	MenuText[2].setString("Exit");
+	MenuText[1].setString("Editor");
+	MenuText[2].setString("Options");
+	MenuText[3].setString("Exit");
 
 	//Setting the text, font, and color of the Menu
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
 		MenuText[i].setFont(fontText);
 		MenuText[i].setColor(sf::Color(175, 175, 175));
@@ -55,9 +56,9 @@ void MainMenu::update(float deltaT)
 			MenuSelect--;
 			if (MenuSelect < 0)
 			{
-				MenuSelect = 2;
+				MenuSelect = 3;
 			}
-			for (size_t i = 0; i < 3; i++)
+			for (size_t i = 0; i < 4; i++)
 			{
 				MenuText[i].setColor(sf::Color(175, 175, 175));
 			}
@@ -69,19 +70,18 @@ void MainMenu::update(float deltaT)
 	{
 		UpButton = true;
 	}
-
 	//Moving the Menu Selection Down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		if (DownButton)
 		{
 			MenuSelect++;
-			if (MenuSelect > 2)
+			if (MenuSelect > 3)
 			{
 				MenuSelect = 0;
 			}
 
-			for (size_t i = 0; i < 3; i++)
+			for (size_t i = 0; i < 4; i++)
 			{
 				MenuText[i].setColor(sf::Color(175, 175, 175));
 			}
@@ -103,12 +103,20 @@ void MainMenu::update(float deltaT)
 			SceneManager::Run(1);
 		}
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		if (MenuSelect == 1)
+		{
+			SceneManager::Run(2);
+		}
+	}
 }
 
 void MainMenu::render()
 {
 	//m_window.draw(*m_backgroundSprite);
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
 		m_window->draw(MenuText[i]);
 	}
